@@ -19,5 +19,6 @@ module.exports = buildSchema(`
 
     type Mutation {
         createTodo(todo: TodoIn!): Todo!
+        completeTodo(id: ID!): Todo!
     }
 `)

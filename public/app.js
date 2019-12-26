@@ -57,7 +57,7 @@ new Vue({
                 },
                 body: JSON.stringify({query}) 
             })
-                // console.log(response)
+                // console.log(respons e)
                 const res = await response.json()
                 // console.log(res)
                 const todo = res.data.createTodo
@@ -73,19 +73,26 @@ new Vue({
             this.todos = this.todos.filter(t => t.id !== id)
         },
         async completeTodo(id) {
-            const response = await fetch(`/api/todo/${id}`, {
-                method: 'put',
+
+            const query = `mutation {
+                completeTodo(id: "${id}") {
+                   updatedAt
+                }
+            }
+        `
+
+            const response = await fetch(`/graphql`, {
+                method: 'post',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify({done: true})
+                body: JSON.stringify({query})
             })
 
             const res = await response.json()
-            const todo = res.todo
-            // console.log(todo)
-            const index = this.todos.findIndex(t => t.id === todo.id)
-            this.todos[index].updatedAt = todo.updatedAt
+            const index = this.todos.findIndex(t => t.id === id)
+            this.todos[index].updatedAt = res.data.completeTodo.updatedAt
         }
     },
     filters: {

@@ -21,5 +21,16 @@ module.exports = {
         } catch (error) {
             throw new Error(`Create Todo is not available: ${error}`)
         }
+    },
+
+    async completeTodo({id}) {
+        try {
+            const todo = await Todo.findByPk(id) //Поиск по id в MySQL
+            todo.done = true
+            await todo.save() // сохраняем изменения в элементе
+            return todo
+        } catch (error) {
+            throw new Error(`Complete Todo is not available: ${error}`)
+        }
     }
 }
