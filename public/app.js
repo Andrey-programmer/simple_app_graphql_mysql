@@ -9,12 +9,28 @@ new Vue({
         }
     },
     async created() {
-        const response = await fetch('/api/todo', {
-            method: 'get'
+        const query = `
+            query {
+                getTodos {
+                    id
+                    title
+                    done
+                    createdAt
+                    updatedAt
+                }
+            }
+        `
+        const response = await fetch('/graphql', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({query})
         })
-        console.log(response)
-        const todos = await response.json()
-        this.todos = todos
+        const res = await response.json()
+        // console.log(res)
+        this.todos = res.data.getTodos
     },
     methods: {
         async addTodo() {
@@ -86,7 +102,7 @@ new Vue({
                 options.minute = '2-digit'
                 options.second = '2-digit'
             }
-            return new Intl.DateTimeFormat('ru-RU', options).format(new Date(value))
+            return new Intl.DateTimeFormat('ru-RU', options).format(new Date(+value))
         }
     }
 })
