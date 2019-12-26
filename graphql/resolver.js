@@ -32,5 +32,19 @@ module.exports = {
         } catch (error) {
             throw new Error(`Complete Todo is not available: ${error}`)
         }
+    },
+
+    async deleteTodo({id}) {
+        try {
+            const todos = await Todo.findAll({
+                where: {id}    
+            }) //Поиск по id в MySQL
+            await todos[0].destroy() // сохраняем изменения в элементе
+            return true
+        } catch (error) {
+            throw new Error(`Complete Todo is not available: ${error}`)
+            return false
+        }
     }
+
 }

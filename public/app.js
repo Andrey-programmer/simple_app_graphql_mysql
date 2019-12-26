@@ -67,8 +67,18 @@ new Vue({
           
         },
         async removeTodo(id) {
-            await fetch(`/api/todo/${id}`, {
-                method: 'delete'
+            
+            const query = `mutation {
+                deleteTodo(id: "${id}")
+            }
+        `
+            await fetch(`/graphql`, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({query}) 
             })
             this.todos = this.todos.filter(t => t.id !== id)
         },
