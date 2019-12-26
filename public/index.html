@@ -1,0 +1,103 @@
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-card
+                color="grey lighten-4"
+                flat
+                height="200px"
+                tile
+            >
+                <v-toolbar :dark="isDark">
+                    <v-app-bar-nav-icon></v-app-bar-nav-icon>
+                    <v-toolbar-title>Список дел</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn icon>
+                        <v-icon>mdi-heart</v-icon>
+                    </v-btn>
+                </v-toolbar>
+            </v-card>
+            <v-container>
+                <v-layout row justify-center>
+                    <v-flex xs-12>
+                        <v-card class="mx-auto" max-width="800" outlined>
+                            <v-container>
+                                <v-subheader class="headline">
+                                  {{new Date() | date}}
+                                </v-subheader>
+                                <v-spacer></v-spacer>
+                
+                                <p class="text-sm-right mr-10"><b>{{todos.length}}</b> Задач</p>
+                
+                                <v-flex xs12>
+                                    <v-text-field
+                                        clearable
+                                        filled
+                                        v-model="todoTitle"
+                                        id="newTodo"
+                                        name="newTodo"
+                                        label="Введите название задачи"
+                                        @keyup.enter="addTodo"
+                                        style="display: inline-block; min-width: 95%"
+                                    >
+                                    </v-text-field>                                
+                                </v-flex>
+                            </v-container>
+                            <v-subheader class="subheading" v-if="todos.length === 0">
+                                У вас 0 задач, добавьте новую
+                            </v-subheader>
+                            
+                                <v-list subheader two-line flat>
+                                    <v-subheader>Ваши задачи</v-subheader>
+                                    <div 
+                                        v-for="(todo, i) in todos"
+                                        :key="i"
+                                    >
+                                        <v-list-item-group multiple>
+                                            <v-list-item
+                                                class='mr-10'
+                                            >
+                                                    <v-list-item-action>
+                                                        <v-checkbox 
+                                                            v-if="!todo.done"
+                                                            v-model="todo.done"
+                                                            @change="completeTodo(todo.id)"
+                                                        >
+                                                        </v-checkbox>
+                                                    </v-list-item-action>
+        
+                                                    <v-list-item-content>
+                                                        <v-list-item-title :style="{textDecoration: todo.done?'line-through':'none'
+                                                        }">{{todo.title | capitalize}}</v-list-item-title>
+                                                        <v-list-item-subtitle>Добавлено в {{todo.createdAt | date(true)}} (изменено {{todo.updatedAt | date(true)}})</v-list-item-subtitle>
+                                                    </v-list-item-content>
+                                                    <v-icon
+                                                        @click.stop="removeTodo(todo.id)"
+                                                        class="mdi mdi-alpha-x-circle red--text"
+                                                    ></v-icon>
+                                            </v-list-item
+                                            >
+                                        </v-list-item-group>
+                                    </div>
+                                </v-list>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-app>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="/app.js"></script>
+</body>
+
+</html>
