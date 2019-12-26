@@ -38,32 +38,33 @@ new Vue({
             if (!title) {
                 return
             }
-            const response = await fetch('/api/todo', {
+
+            const query = `mutation {
+                    createTodo(todo: {title: "${title}"}) {
+                        id
+                        title
+                        done
+                        createdAt
+                        updatedAt
+                    }
+                }
+            `
+            const response = await fetch('/graphql', {
                 method: 'post',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({title}) 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({query}) 
             })
+                // console.log(response)
                 const res = await response.json()
-                const todo = res.todo
+                // console.log(res)
+                const todo = res.data.createTodo
                 // console.log(todo)
                 this.todos.push(todo)
                 this.todoTitle = ''
-             
-                // .then(res => res.json())
-                // .then(({todo}) => {
-                //     // console.log(todo)
-                //     this.todos.push(todo)
-                //     this.todoTitle = ''
-                // })
-                // .catch(error => {
-                //     console.log(error)
-                // })
-           /*  this.todos.push({
-                title: title,
-                id: Math.random(),
-                done: false,
-                date: new Date()
-            }) */
+          
         },
         async removeTodo(id) {
             await fetch(`/api/todo/${id}`, {
@@ -97,7 +98,7 @@ new Vue({
                 month: 'long',
                 day: '2-digit'
             }
-            if(withTime) {
+            if(withTime) {  
                 options.hour = '2-digit'
                 options.minute = '2-digit'
                 options.second = '2-digit'

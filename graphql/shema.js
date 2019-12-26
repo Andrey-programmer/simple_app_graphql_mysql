@@ -12,4 +12,12 @@ module.exports = buildSchema(`
     type Query {
         getTodos: [Todo!]!
     }
+
+    input TodoIn {
+        title: String!
+    }
+
+    type Mutation {
+        createTodo(todo: TodoIn!): Todo!
+    }
 `)
